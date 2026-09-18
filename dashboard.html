@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI-01 | Operations Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #1e293b;
+            padding: 20px 30px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: white;
+        }
+
+        .header p {
+            margin-top: 5px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .status {
+            background: #14532d;
+            color: #86efac;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #94a3b8;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .card-title {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            margin-bottom: 18px;
+            color: white;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .step {
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .incident-box {
+            background: #0f172a;
+            border-left: 4px solid #ef4444;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .incident-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .incident-code {
+            font-weight: bold;
+            color: #fca5a5;
+        }
+
+        .severity {
+            background: #7f1d1d;
+            color: #fecaca;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .incident-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .incident-detail {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #86efac;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workflow {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div>
+            <h1>AI-01 Incident Resolution Engine</h1>
+            <p>Autonomous Enterprise Operations Console</p>
+        </div>
+
+        <div class="status">
+            ● SYSTEM ONLINE
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="welcome">
+            <h2>Operations Dashboard</h2>
+            <p>Monitor incidents, investigate root causes and manage autonomous remediation.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-title">TOTAL ALERTS</div>
+                <div class="card-value" id="totalAlerts">--</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">OPEN INCIDENTS</div>
+                <div class="card-value" id="openIncidents">--</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">HIGH SEVERITY</div>
+                <div class="card-value" id="highSeverity">--</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">RESOLVED INCIDENTS</div>
+                <div class="card-value" id="resolvedIncidents">--</div>
+            </div>
+
+        </div>
+
+        <section class="section">
+
+            <h3>Autonomous Resolution Workflow</h3>
+
+            <div class="workflow">
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    Alert Ingestion
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    Correlation
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    Investigation
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    Impact & Priority
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    Remediation
+                </div>
+
+                <div class="step">
+                    <div class="step-number">6</div>
+                    Verification
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h3>Latest Incident</h3>
+
+            <div id="incidentContainer">
+                Loading incident data...
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        const API = "http://localhost:3000";
+
+        async function loadDashboard() {
+
+            try {
+
+                const alertsResponse =
+                    await fetch(`${API}/api/alerts`);
+
+                const alertsData =
+                    await alertsResponse.json();
+
+                const incidentsResponse =
+                    await fetch(`${API}/api/incidents`);
+
+                const incidentsData =
+                    await incidentsResponse.json();
+
+                const alerts = alertsData.alerts || [];
+                const incidents = incidentsData.incidents || [];
+
+                document.getElementById("totalAlerts").textContent =
+                    alerts.length;
+
+                document.getElementById("openIncidents").textContent =
+                    incidents.filter(i => i.status === "OPEN").length;
+
+                document.getElementById("highSeverity").textContent =
+                    incidents.filter(i => i.severity === "HIGH").length;
+
+                document.getElementById("resolvedIncidents").textContent =
+                    incidents.filter(i => i.status === "RESOLVED").length;
+
+                const container =
+                    document.getElementById("incidentContainer");
+
+                if (incidents.length === 0) {
+
+                    container.innerHTML =
+                        "<p>No incidents available.</p>";
+
+                    return;
+                }
+
+                const incident = incidents[0];
+
+                container.innerHTML = `
+                    <div class="incident-box">
+
+                        <div class="incident-header">
+
+                            <span class="incident-code">
+                                ${incident.incident_code}
+                            </span>
+
+                            <span class="severity">
+                                ${incident.severity}
+                            </span>
+
+                        </div>
+
+                        <div class="incident-title">
+                            ${incident.title}
+                        </div>
+
+                        <div class="incident-detail">
+                            <strong>Status:</strong>
+                            ${incident.status}
+                        </div>
+
+                        <div class="incident-detail">
+                            <strong>Root Cause:</strong>
+                            ${incident.root_cause || "Under investigation"}
+                        </div>
+
+                        <div class="incident-detail">
+                            <strong>Business Impact:</strong>
+                            ${incident.business_impact || "Being assessed"}
+                        </div>
+
+                        <div class="actions">
+
+                            <button
+                                class="primary"
+                                onclick="viewIncident(${incident.id})">
+                                View Incident
+                            </button>
+
+                            <button
+                                class="secondary"
+                                onclick="refreshDashboard()">
+                                Refresh
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("incidentContainer").innerHTML =
+                    "<p style='color:#f87171'>Unable to connect to AI-01 backend.</p>";
+
+            }
+
+        }
+
+        function viewIncident(id) {
+
+            window.location.href =
+                `incident.html?id=${id}`;
+
+        }
+
+        function refreshDashboard() {
+
+            loadDashboard();
+
+        }
+
+        loadDashboard();
+
+    </script>
+
+</body>
+</html>

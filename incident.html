@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI-01 | Incident Details</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+    background: #0b1220;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+        .header {
+            padding: 22px 35px;
+            border-bottom: 1px solid #263248;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+        }
+
+        .brand p {
+            color: #8f9bb3;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .online {
+            background: #12351f;
+            color: #5ee68a;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .container {
+            padding: 30px 35px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #60a5fa;
+            border: 1px solid #60a5fa;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-bottom: 25px;
+        }
+
+        .back-btn:hover {
+            background: #60a5fa;
+            color: #08111f;
+        }
+
+        .incident-header {
+            background: #111a2b;
+            border: 1px solid #263248;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .incident-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .incident-code {
+            color: #60a5fa;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .incident-title h2 {
+            font-size: 27px;
+        }
+
+        .incident-title p {
+            color: #8f9bb3;
+            margin-top: 8px;
+        }
+
+        .badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .high {
+            background: #3a171b;
+            color: #ff7078;
+        }
+
+        .resolved {
+            background: #12351f;
+            color: #5ee68a;
+        }
+
+        .open {
+            background: #3a2d14;
+            color: #f6c85f;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: #111a2b;
+            border: 1px solid #263248;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .card h3 {
+            font-size: 17px;
+            margin-bottom: 18px;
+        }
+
+        .card p {
+            color: #b8c2d6;
+            line-height: 1.6;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .root-cause {
+            border-left: 4px solid #60a5fa;
+            padding-left: 15px;
+        }
+
+        .impact-item {
+            margin-bottom: 14px;
+        }
+
+        .impact-label {
+            color: #7f8ba3;
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .service {
+            background: #19253a;
+            border: 1px solid #30415d;
+            color: #cbd5e1;
+            padding: 7px 11px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+
+        .step {
+            min-width: 135px;
+            text-align: center;
+            padding: 15px 10px;
+            background: #18243a;
+            border: 1px solid #30415d;
+            border-radius: 9px;
+        }
+
+        .step-number {
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto auto 8px;
+            border-radius: 50%;
+            background: #2563eb;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .step span {
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .arrow {
+            color: #64748b;
+            font-size: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #172238;
+            color: #9eabc2;
+            text-align: left;
+            padding: 13px;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 14px 13px;
+            border-top: 1px solid #263248;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .alert-severity {
+            color: #ff7078;
+            font-weight: bold;
+        }
+
+        .action-box {
+            background: #18243a;
+            border: 1px solid #30415d;
+            border-radius: 9px;
+            padding: 18px;
+        }
+
+        .action-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .action-tag {
+            background: #0f1728;
+            padding: 7px 11px;
+            border-radius: 6px;
+            color: #b8c2d6;
+            font-size: 12px;
+        }
+
+        .audit-item {
+            border-left: 3px solid #30415d;
+            padding: 8px 0 8px 15px;
+            margin-bottom: 13px;
+        }
+
+        .audit-event {
+            color: #60a5fa;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .audit-details {
+            color: #b8c2d6;
+            margin-top: 4px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .audit-time {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #8f9bb3;
+            padding: 50px;
+        }
+
+        .error {
+            background: #32171b;
+            border: 1px solid #71343a;
+            color: #ff858d;
+            padding: 18px;
+            border-radius: 9px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .incident-title {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+        }
+        .action-box button,
+.action-box button:focus,
+.action-box button:active {
+    outline: none;
+    scroll-margin: 0;
+}
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+        <h1>AI-01 Incident Resolution Engine</h1>
+        <p>Autonomous Enterprise Incident Management</p>
+    </div>
+
+    <div class="online">
+        ● System Online
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <button class="back-btn" onclick="goBack()">
+        ← Back to Incidents
+    </button>
+
+    <div id="content">
+
+        <div class="loading">
+            Loading incident details...
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const API = "http://localhost:3000";
+    console.log("INCIDENT PAGE LOADED", Date.now());
+
+window.addEventListener("beforeunload", () => {
+    console.log("INCIDENT PAGE RELOADING");
+});
+
+
+    const params = new URLSearchParams(window.location.search);
+
+    const incidentId = params.get("id");
+
+
+    function goBack() {
+
+        window.location.href = "incidents.html";
+
+    }
+
+
+    async function loadIncident() {
+
+        const content =
+            document.getElementById("content");
+
+        if (!incidentId) {
+
+            content.innerHTML = `
+                <div class="error">
+                    Incident ID is missing.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/incidents/${incidentId}`
+                );
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.error || "Failed to load incident"
+                );
+
+            }
+
+
+            const incident = data.incident;
+            const actions = data.actions || [];
+            const logs = data.audit_logs || [];
+
+
+            let statusClass = "open";
+
+            if (incident.status === "RESOLVED") {
+                statusClass = "resolved";
+            }
+
+
+            let alertsHTML = "";
+
+            /*
+             * Alerts are loaded separately because the
+             * incident-detail API returns incident/actions/audit.
+             */
+
+            let alerts = [];
+
+            try {
+
+                const alertResponse =
+                    await fetch(`${API}/api/alerts`);
+
+                const alertData =
+                    await alertResponse.json();
+
+                if (alertData.success) {
+
+                    alerts =
+                        alertData.alerts.filter(
+                            alert =>
+                                Number(alert.incident_id) ===
+                                Number(incident.id)
+                        );
+
+                }
+
+            } catch (alertError) {
+
+                console.error(alertError);
+
+            }
+
+
+            if (alerts.length === 0) {
+
+                alertsHTML = `
+                    <tr>
+                        <td colspan="6">
+                            No alerts linked to this incident.
+                        </td>
+                    </tr>
+                `;
+
+            } else {
+
+                alerts.forEach(alert => {
+
+                    alertsHTML += `
+                        <tr>
+                            <td>${alert.id}</td>
+                            <td>${alert.alert_type}</td>
+                            <td>${alert.service}</td>
+                            <td>${alert.message}</td>
+                            <td>
+                                <span class="alert-severity">
+                                    ${alert.severity}
+                                </span>
+                            </td>
+                            <td>${alert.status}</td>
+                        </tr>
+                    `;
+
+                });
+
+            }
+
+
+            let servicesHTML = `
+                <span class="service">
+                    Payment Service
+                </span>
+
+                <span class="service">
+                    Order Service
+                </span>
+
+                <span class="service">
+                    Checkout Service
+                </span>
+            `;
+
+
+            let actionHTML = "";
+
+            if (actions.length === 0) {
+
+                actionHTML = `
+                    <p>No remediation action recorded.</p>
+                `;
+
+            } else {
+
+                actions.forEach(action => {
+
+                    const approvalText =
+                        action.approval_required === 1
+                            ? action.approval_status
+                            : "Not Required";
+
+                            const actionStatus =
+    action.approval_required === 1
+        ? "Human approval required"
+        : "Autonomous execution allowed";
+
+                    actionHTML += `
+                        <div class="action-box"
+                             style="margin-bottom:12px;">
+
+                            <div class="action-name">
+                                ${action.action_name}
+                            </div>
+
+                            <div class="action-row">
+
+                                <span class="action-tag">
+                                    Risk: ${action.risk_level}
+                                </span>
+
+                                <span class="action-tag">
+                                    Approval: ${approvalText}
+                                </span>
+
+                                <span class="action-tag">
+                                    Execution: ${action.execution_status}
+                                </span>
+
+                            </div>
+
+                                                        <button
+                                type="button"
+                                onmousedown="event.preventDefault();"
+                                onclick="event.preventDefault(); riskCheck(${action.id});"
+                                style="background:#0891b2;color:white;border:none;padding:9px 13px;border-radius:7px;cursor:pointer;margin-top:10px;">
+                                🛡 Risk Check
+                            </button>
+
+                            ${action.approval_required === 1 ? `
+                                <button
+                                    type="button"
+                                    onmousedown="event.preventDefault();"
+                                    onclick="event.preventDefault(); approveAction(${action.id});"
+                                    style="background:#f59e0b;color:white;border:none;padding:9px 13px;border-radius:7px;cursor:pointer;margin-top:10px;">
+                                    👤 Approve Action
+                                </button>
+                            ` : ""}
+
+                            <button
+                                type="button"
+                                onmousedown="event.preventDefault();"
+                                onclick="event.preventDefault(); executeAction(${action.id});"
+                                style="background:#16a34a;color:white;border:none;padding:9px 13px;border-radius:7px;cursor:pointer;margin-top:10px;">
+                                ▶ Execute Action
+                            </button>
+
+                            <button
+                                type="button"
+                                onmousedown="event.preventDefault();"
+                                onclick="event.preventDefault(); verifyRecovery(${action.id});"
+                                style="background:#9333ea;color:white;border:none;padding:9px 13px;border-radius:7px;cursor:pointer;margin-top:10px;">
+                                ✓ Verify Recovery
+                            </button>
+
+                        </div>
+                    `;
+
+                });
+
+            }
+
+
+            let auditHTML = "";
+
+            if (logs.length === 0) {
+
+                auditHTML = `
+                    <p>No audit events recorded.</p>
+                `;
+
+            } else {
+
+                logs.forEach(log => {
+
+                    auditHTML += `
+                        <div class="audit-item">
+
+                            <div class="audit-event">
+                                ${log.event}
+                            </div>
+
+                            <div class="audit-details">
+                                ${log.details}
+                            </div>
+
+                            <div class="audit-time">
+                                ${new Date(
+                                    log.timestamp
+                                ).toLocaleString()}
+                            </div>
+
+                        </div>
+                    `;
+
+                });
+
+            }
+
+
+            content.innerHTML = `
+
+                <section class="incident-header">
+
+                    <div class="incident-title">
+
+                        <div>
+
+                            <div class="incident-code">
+                                ${incident.incident_code}
+                            </div>
+
+                            <h2>
+                                ${incident.title}
+                            </h2>
+
+                            <p>
+                                Created:
+                                ${new Date(
+                                    incident.created_at
+                                ).toLocaleString()}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <span class="badge high">
+                                ${incident.severity}
+                            </span>
+
+                            <span class="badge ${statusClass}">
+                                ${incident.status}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <div class="grid">
+
+
+                    <!-- ROOT CAUSE -->
+
+                    <section class="card">
+
+                        <h3>
+                            🔎 Probable Root Cause
+                        </h3>
+
+                        <div class="root-cause">
+
+                            <p>
+                                ${incident.root_cause ||
+                                "Investigation not completed yet."}
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- BUSINESS IMPACT -->
+
+                    <section class="card">
+
+                        <h3>
+                            📊 Business Impact
+                        </h3>
+
+                        <p>
+                            ${incident.business_impact ||
+                            "Business impact not assessed yet."}
+                        </p>
+
+                    </section>
+
+
+                    <!-- AFFECTED SERVICES -->
+
+                    <section class="card full">
+
+                        <h3>
+                            ⚠ Affected Services
+                        </h3>
+
+                        <div class="services">
+                            ${servicesHTML}
+                        </div>
+
+                    </section>
+
+
+                    <!-- WORKFLOW -->
+
+                    <section class="card full">
+
+                        <h3>
+                            Autonomous Resolution Workflow
+                        </h3>
+
+                        <div class="workflow">
+
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <span>Alert Ingestion</span>
+                            </div>
+
+                            <div class="arrow">→</div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <span>Correlation</span>
+                            </div>
+
+                            <div class="arrow">→</div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <span>Investigation</span>
+                            </div>
+
+                            <div class="arrow">→</div>
+
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <span>Impact & Priority</span>
+                            </div>
+
+                            <div class="arrow">→</div>
+
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <span>Remediation</span>
+                            </div>
+
+                            <div class="arrow">→</div>
+
+                            <div class="step">
+                                <div class="step-number">6</div>
+                                <span>Verification</span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ALERTS -->
+
+                    <section class="card full">
+
+                        <h3>
+                            🚨 Correlated Alerts
+                        </h3>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Type</th>
+                                        <th>Service</th>
+                                        <th>Message</th>
+                                        <th>Severity</th>
+                                        <th>Status</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    ${alertsHTML}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- REMEDIATION -->
+
+<section class="card">
+
+    <h3>
+        🛠 Remediation Actions
+    </h3>
+
+    ${actionHTML}
+
+    <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+
+        <button
+    type="button"
+    id="investigateBtn"
+    style="background:#2563eb;color:white;border:none;padding:10px 15px;border-radius:7px;cursor:pointer;">
+    🔍 Investigate
+</button>
+
+        <button
+    type="button"
+    onclick="assessImpact()"
+            style="background:#475569;color:white;border:none;padding:10px 15px;border-radius:7px;cursor:pointer;">
+            📊 Assess Impact
+        </button>
+
+        <button
+    type="button"
+    onclick="generateRemediation()"
+            style="background:#7c3aed;color:white;border:none;padding:10px 15px;border-radius:7px;cursor:pointer;">
+            🛠 Generate Remediation
+        </button>
+
+        <button
+    type="button"
+    onclick="generateHighRiskRemediation()"
+    style="background:#dc2626;color:white;border:none;padding:10px 15px;border-radius:7px;cursor:pointer;">
+    ⚠ Generate High-Risk Rollback
+</button>
+
+    </div>
+
+    <div id="actionMessage"
+     style="
+        margin-top:15px;
+        color:#ffffff;
+        background:#1e293b;
+        border:1px solid #334155;
+        padding:12px 16px;
+        border-radius:8px;
+        display:none;
+        font-weight:bold;">
+</div>
+
+</section>
+
+
+                    <!-- RISK GOVERNANCE -->
+
+                    <section class="card">
+
+                        <h3>
+                            🛡 Risk Governance
+                        </h3>
+
+                        <div class="action-box">
+
+                            <div class="action-name">
+                                Risk-Governed Autonomy
+                            </div>
+
+                            <p>
+                                Low-risk and reversible actions
+                                may be executed autonomously.
+                                High-risk actions require
+                                human approval before execution.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- AUDIT -->
+
+                    <section class="card full">
+
+                        <h3>
+                            📋 Audit Trail
+                        </h3>
+
+                        ${auditHTML}
+
+                    </section>
+
+
+                </div>
+
+            `;
+
+            document
+    .getElementById("investigateBtn")
+    .addEventListener("click", investigateIncident);
+
+        } catch (error) {
+
+            console.error(error);
+
+            content.innerHTML = `
+                <div class="error">
+                    Unable to load incident details.
+                    Make sure the AI-01 backend is running.
+                </div>
+            `;
+
+        }
+
+    }
+
+   function showActionMessage(text) {
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = text;
+    message.style.display = "block";
+
+    clearTimeout(window.actionMessageTimer);
+
+    window.actionMessageTimer = setTimeout(function () {
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }, 10000);
+}
+
+async function investigateIncident() {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Investigating incident...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/incidents/${incidentId}/investigate`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Investigation failed"
+            );
+        }
+
+        showActionMessage(
+    "Investigation completed successfully."
+);
+
+        // Remove focus from the clicked button
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+
+loadIncident();
+
+async function assessImpact() {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Assessing business impact...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/incidents/${incidentId}/assess`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Impact assessment failed"
+            );
+        }
+
+        showActionMessage(
+    "Business impact assessment completed successfully."
+);
+    } catch (error) {
+
+        console.error(error);
+
+showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+async function generateRemediation() {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Generating remediation recommendation...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/incidents/${incidentId}/remediation`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Remediation generation failed"
+            );
+        }
+
+        showActionMessage(
+    "Remediation recommendation generated successfully."
+);
+
+    } catch (error) {
+
+    console.error(error);
+
+    showActionMessage(
+        `Error: ${error.message}`
+    );
+}
+}
+
+
+async function generateHighRiskRemediation() {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Generating high-risk rollback recommendation...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/incidents/${incidentId}/high-risk-remediation`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "High-risk remediation generation failed"
+            );
+        }
+
+        showActionMessage(
+    "High-risk rollback generated. Human approval is required before execution."
+);
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+async function riskCheck(actionId) {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Checking action risk and policy...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/actions/${actionId}/risk-check`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Risk check failed"
+            );
+        }
+
+        showActionMessage(
+    `Risk check completed: ${data.risk_check.decision}`
+);
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+async function approveAction(actionId) {
+    document.activeElement?.blur();
+
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Waiting for human approval...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/actions/${actionId}/approve`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Approval failed"
+            );
+        }
+
+        showActionMessage(
+    "Human approval granted. Action is now ready for execution."
+);
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+async function executeAction(actionId) {
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Executing approved remediation action...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/actions/${actionId}/execute`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Action execution failed"
+            );
+        }
+
+        showActionMessage(
+    `Action executed successfully: ${data.execution.result}`
+);
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+async function verifyRecovery(actionId) {
+    document.activeElement?.blur();
+
+    const message = document.getElementById("actionMessage");
+
+    if (!message) {
+        return;
+    }
+
+    message.textContent = "Verifying service recovery...";
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/actions/${actionId}/verify`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Verification failed"
+            );
+        }
+
+        showActionMessage(
+    `Recovery verification: ${data.verification.verification_status}. Incident status: ${data.verification.incident_status}`
+);
+
+    } catch (error) {
+
+        console.error(error);
+
+        showActionMessage(
+    `Error: ${error.message}`
+);
+    }
+}
+
+</script>
+
+</body>
+</html>
